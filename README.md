@@ -11,13 +11,17 @@ on the bottom edge keeps triggering. No ads, no internet permission.
 2. Pick unlock and lock methods in the app. There's no accessibility switch to turn on: with the
    adb permission, RainLock switches its accessibility service on when you lock and off when you
    unlock.
-3. Without the adb permission, the app shows a **Setup** section. Tap **One-time permission**:
-   **Use Shizuku** grants it from the phone (install Shizuku, start it with Wireless debugging,
-   tap again), and **Copy command** gives the adb command for a computer. Or tap **Accessibility
-   service** and turn it on by hand. If Android says "Restricted setting": Settings → Apps →
-   RainLock → ⋮ → Allow restricted settings, then try again. A service turned on by hand stays on
-   all the time, and Circle to Search is only blocked while the navigation bar is hidden (see
-   How the lock works).
+3. Without the adb permission, the app shows a **Setup** section with two options:
+   - **Basic: accessibility service** needs no computer: turn the service on by hand. If Android
+     says "Restricted setting": Settings → Apps → RainLock → ⋮ → Allow restricted settings, then
+     try again. The catches: the service stays on all the time, which banking apps flag, and
+     Circle to Search is only blocked while the navigation bar is hidden (see How the lock works).
+   - **Better: one-time permission** fixes both, but needs adb. **Use Shizuku** grants it from the
+     phone (install Shizuku, start it with Wireless debugging, tap again), and **Copy command**
+     gives the adb command for a computer.
+
+   With the basic option on, Setup becomes **Optional upgrade** and keeps only the permission.
+   Granting it switches the hand-enabled service off until the next lock.
 
 ## Release builds
 

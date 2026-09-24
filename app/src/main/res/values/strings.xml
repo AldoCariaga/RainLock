@@ -13,11 +13,16 @@
     <string name="hint_volume">Press volume down 3 times</string>
     <string name="lock_failed">RainLock couldn\'t switch its accessibility service on. Open RainLock and check Setup</string>
 
-    <string name="cat_setup">Setup</string>
-    <string name="status_service">Accessibility service</string>
-    <string name="status_service_off">Off. Tap, then Installed apps → RainLock. Or grant the one-time permission below</string>
-    <string name="status_guard">One-time permission</string>
-    <string name="status_guard_missing">Not granted. Tap to grant it with Shizuku or a computer</string>
+    <string name="cat_setup">Setup: pick one</string>
+    <string name="cat_upgrade">Optional upgrade</string>
+    <string name="status_service">Basic: accessibility service</string>
+    <string name="status_service_summary">No computer needed. But it stays on all the time, which some banking apps object to, and Circle to Search can open for a few seconds after a swipe up</string>
+    <string name="status_guard">Better: one-time permission</string>
+    <string name="status_guard_summary">Needs a computer, or Shizuku with Wireless debugging. The service is then on only while locked, and Circle to Search stays blocked after a swipe up</string>
+    <string name="service_title">Accessibility service</string>
+    <string name="service_message">In Accessibility, tap Installed apps → RainLock and turn it on.\n\nIf Android says \"Restricted setting\", tap App info, then ⋮ → Allow restricted settings, and try again.\n\nThe catches: it stays on all the time, and some banking apps warn about that or won\'t open. And Circle to Search is only blocked while the navigation bar is hidden. A swipe up brings the bar back for a few seconds, and holding it then opens Circle to Search.\n\nThe one-time permission fixes both.</string>
+    <string name="open_accessibility">Open Accessibility</string>
+    <string name="app_info">App info</string>
     <string name="lock_now">Lock now</string>
     <string name="lock_now_summary">Locks, then returns to the app you were using</string>
 

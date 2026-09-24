@@ -127,6 +127,11 @@ public final class RainLockService extends AccessibilityService {
         super.onDestroy();
     }
 
+    /** Switches off between locks once the app can switch it back on itself, as right after the grant. */
+    public void switchOffIfIdle() {
+        if (!isLocked() && ServiceSwitch.onDemand(this)) switchOff();
+    }
+
     /** Turns the service off until the next lock. */
     private void switchOff() {
         running = null;  // a lock asked for from now on switches the service back on afresh

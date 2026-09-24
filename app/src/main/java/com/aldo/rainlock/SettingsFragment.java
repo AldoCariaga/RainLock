@@ -62,7 +62,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
         find(STATUS_SERVICE).setOnPreferenceClickListener(p -> {
-            startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+            showServiceSteps();
             return true;
         });
         find(STATUS_GUARD).setOnPreferenceClickListener(p -> {
@@ -117,8 +117,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         if (service == null) new SearchGestureGuard(context).restore();
 
         boolean granted = SearchGestureGuard.hasPermission(context);
-        // Setup only shows what's left to do; without the permission, turning the service on by hand also works
-        find(CAT_SETUP).setVisible(!granted);
+        if (granted && service != null) service.switchOffIfIdle();  // on by hand until the grant, e.g. an upgrade
+        // Setup only shows what's left to do; with the service on by hand, the permission is an upgrade
+        Preference setup = find(CAT_SETUP);
+        setup.setVisible(!granted);
+        setup.setTitle(service == null ? R.string.cat_setup : R.string.cat_upgrade);
         find(STATUS_SERVICE).setVisible(service == null);
         find(LOCK_NOW).setEnabled(RainLockService.canLock(context));
         TwoStatePreference guard = find(Prefs.GUARD_SEARCH);
@@ -129,6 +132,19 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private void lockNow() {
         RainLockService.requestLock(requireContext());
         requireActivity().moveTaskToBack(true);  // back to the app underneath, e.g. Maps
+    }
+
+    private void showServiceSteps() {
+        Context context = requireContext();
+        new MaterialAlertDialogBuilder(context)
+                .setTitle(R.string.service_title)
+                .setMessage(R.string.service_message)
+                .setPositiveButton(R.string.open_accessibility, (dialog, which) ->
+                        startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)))
+                .setNeutralButton(R.string.app_info, (dialog, which) ->  // where Allow restricted settings lives
+                        startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                Uri.fromParts("package", context.getPackageName(), null))))
+                .show();
     }
 
     private void showGrantOptions() {

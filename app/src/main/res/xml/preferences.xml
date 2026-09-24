@@ -7,7 +7,8 @@
         app:summary="@string/lock_now_summary"
         app:title="@string/lock_now" />
 
-    <!-- Hidden once the adb permission is granted: the app then handles the service itself -->
+    <!-- Hidden once the adb permission is granted: the app then handles the service itself.
+         With the service on by hand, the permission stays here as an upgrade. -->
     <PreferenceCategory
         app:iconSpaceReserved="false"
         app:key="cat_setup"
@@ -15,12 +16,12 @@
         <Preference
             app:iconSpaceReserved="false"
             app:key="status_service"
-            app:summary="@string/status_service_off"
+            app:summary="@string/status_service_summary"
             app:title="@string/status_service" />
         <Preference
             app:iconSpaceReserved="false"
             app:key="status_guard"
-            app:summary="@string/status_guard_missing"
+            app:summary="@string/status_guard_summary"
             app:title="@string/status_guard" />
     </PreferenceCategory>
 
