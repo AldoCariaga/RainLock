@@ -187,7 +187,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         context.getSystemService(StatusBarManager.class).requestAddTileService(
                 new ComponentName(context, LockTileService.class),
                 getString(R.string.tile_label),
-                Icon.createWithResource(context, R.drawable.ic_lock),
+                Icon.createWithResource(context, R.drawable.ic_tile),
                 context.getMainExecutor(),
                 result -> {
                     if (result == StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ALREADY_ADDED) {
