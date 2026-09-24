@@ -64,12 +64,6 @@
         <SwitchPreferenceCompat
             app:defaultValue="false"
             app:iconSpaceReserved="false"
-            app:key="trigger_floating"
-            app:summary="@string/trigger_floating_summary"
-            app:title="@string/trigger_floating" />
-        <SwitchPreferenceCompat
-            app:defaultValue="false"
-            app:iconSpaceReserved="false"
             app:key="trigger_bluetooth"
             app:summary="@string/trigger_bluetooth_summary"
             app:title="@string/trigger_bluetooth" />

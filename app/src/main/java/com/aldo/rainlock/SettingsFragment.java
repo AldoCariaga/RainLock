@@ -117,10 +117,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         if (service == null) new SearchGestureGuard(context).restore();
 
         boolean granted = SearchGestureGuard.hasPermission(context);
-        find(STATUS_SERVICE).setSummary(service != null ? R.string.status_service_on : R.string.status_service_off);
+        Preference serviceStatus = find(STATUS_SERVICE);
+        serviceStatus.setSummary(granted ? R.string.status_service_on_demand
+                : service != null ? R.string.status_service_on : R.string.status_service_off);
+        serviceStatus.setSelectable(!granted);  // the app switches it, nothing to do in Settings
         find(STATUS_GUARD).setSummary(granted ? R.string.status_guard_granted : R.string.status_guard_missing);
         find(STATUS_PHONE).setSummary(describePhone(context));
-        find(LOCK_NOW).setEnabled(service != null);
+        find(LOCK_NOW).setEnabled(RainLockService.canLock(context));
         find(Prefs.GUARD_SEARCH).setSummary(granted ? R.string.guard_summary : R.string.guard_summary_no_permission);
     }
 
@@ -138,9 +141,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void lockNow() {
-        RainLockService service = RainLockService.running();
-        if (service == null) return;
-        service.lock();
+        RainLockService.requestLock(requireContext());
         requireActivity().moveTaskToBack(true);  // back to the app underneath, e.g. Maps
     }
 

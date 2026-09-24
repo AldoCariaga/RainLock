@@ -6,11 +6,14 @@ on the bottom edge keeps triggering. No ads, no internet permission.
 ## Setup
 
 1. Phone on USB with USB debugging on. From this folder run `.\build-and-run.ps1`. It builds,
-   installs, grants the Circle to Search permission (below) and opens the app. It needs JAVA_HOME (JDK 17)
+   installs, grants the adb permission (below) and opens the app. It needs JAVA_HOME (JDK 17)
    and ANDROID_HOME set.
-2. In the app tap **Accessibility service** and turn RainLock on. If Android says "Restricted
-   setting": Settings → Apps → RainLock → ⋮ → Allow restricted settings, then try again.
-3. Pick unlock and lock methods in the app.
+2. Pick unlock and lock methods in the app. There's no accessibility switch to turn on: with the
+   adb permission, RainLock switches its accessibility service on when you lock and off when you
+   unlock.
+3. Without the adb permission, turn the service on by hand instead: in the app tap **Accessibility
+   service**. If Android says "Restricted setting": Settings → Apps → RainLock → ⋮ → Allow
+   restricted settings, then try again. The service then stays on all the time.
 
 ## How the lock works
 
@@ -18,6 +21,12 @@ on the bottom edge keeps triggering. No ads, no internet permission.
   status and navigation bars; ordinary "draw over apps" overlays sit below them, which is why
   typical touch-lock apps leak there.
 - **Volume unlock:** the accessibility service filters key events (`flagRequestFilterKeyEvents`).
+- **Service only on while locked:** banking apps flag any accessibility service that's switched on,
+  so RainLock keeps its own off between locks. A lock adds it to
+  `secure/enabled_accessibility_services` and it locks as soon as it connects (about 200 ms on
+  the S22+). Unlocking calls `disableSelf()`. If the service comes on for any other reason, such
+  as a reboot or crash mid-lock, it restores Circle to Search and switches straight back off. The
+  Bluetooth trigger is a manifest receiver so it works with the service off.
 - **System gestures:** no window can intercept the gesture-navigation swipes, so the lock works
   around them:
   - The overlay is focusable, which makes it the window that controls the system bars. It hides
@@ -55,8 +64,9 @@ which only adb can grant:
 
     adb shell pm grant com.aldo.rainlock android.permission.WRITE_SECURE_SETTINGS
 
-The grant survives updates and reboots and is lost on uninstall. If the phone dies or the app
-crashes while locked, the next start of the service puts the old values back.
+The same permission lets the app switch its accessibility service on and off. The grant survives
+updates and reboots and is lost on uninstall. If the phone dies or the app crashes while locked,
+the next start of the service puts the old values back.
 
 To map another phone, run the same snapshot diff while flipping its Circle to Search toggle.
 
@@ -72,6 +82,8 @@ To map another phone, run the same snapshot diff while flipping its Circle to Se
 
     # lock without touching the phone
     adb shell am start -n com.aldo.rainlock/.MainActivity -a com.aldo.rainlock.action.LOCK -f 0x10008000
-    # unlock: switch the service off and back on (also restores Circle to Search)
+    # lock from the tile; open the panel first, since One UI freezes the app between locks
+    adb shell cmd statusbar expand-settings
+    adb shell cmd statusbar click-tile com.aldo.rainlock/.LockTileService
+    # unlock: switch the service off (also restores Circle to Search; the next lock turns it back on)
     adb shell settings delete secure enabled_accessibility_services
-    adb shell settings put secure enabled_accessibility_services com.aldo.rainlock/com.aldo.rainlock.RainLockService

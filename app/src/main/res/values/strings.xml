@@ -5,19 +5,20 @@
     <string name="tile_ready">Tap to lock</string>
     <string name="tile_needs_setup">Tap to set up</string>
 
-    <string name="a11y_description">Blocks touches while you ride in the rain. When you lock, RainLock covers the screen with an invisible layer that swallows every touch, and listens for volume-down presses so you can unlock with the button. It does not read what is on your screen.</string>
+    <string name="a11y_description">Blocks touches while you ride in the rain. When you lock, RainLock covers the screen with an invisible layer that swallows every touch, and listens for volume-down presses so you can unlock with the button. It does not read what is on your screen. With the adb permission, RainLock switches this on when you lock and off again when you unlock.</string>
 
     <string name="hint_slide">Slide to unlock  ›</string>
     <string name="hint_slide_left">‹  Slide to unlock</string>
     <string name="hint_double_tap">Double-tap the lock</string>
     <string name="hint_volume">Press volume down 3 times</string>
-    <string name="floating_description">Lock the screen</string>
+    <string name="lock_failed">RainLock couldn\'t switch its accessibility service on. Open RainLock and check Setup</string>
 
     <string name="cat_setup">Setup</string>
     <string name="status_service">Accessibility service</string>
-    <string name="status_service_on">On</string>
-    <string name="status_service_off">Off. Tap, then Installed apps → RainLock</string>
-    <string name="status_guard">Circle to Search permission</string>
+    <string name="status_service_on">On all the time. With the adb permission below it\'s only on while locked, so banking apps don\'t flag it</string>
+    <string name="status_service_off">Off. Tap, then Installed apps → RainLock. Or grant the adb permission below</string>
+    <string name="status_service_on_demand">Switched on only while locked, so banking apps don\'t flag it</string>
+    <string name="status_guard">adb permission</string>
     <string name="status_guard_granted">Granted</string>
     <string name="status_guard_missing">Not granted. Tap for the one-time adb command</string>
     <string name="status_phone">This phone</string>
@@ -45,8 +46,6 @@
     <string name="trigger_tile_summary">Swipe down and tap RainLock</string>
     <string name="add_tile">Add the tile to Quick Settings</string>
     <string name="tile_already_added">The tile is already in Quick Settings</string>
-    <string name="trigger_floating">Floating lock button</string>
-    <string name="trigger_floating_summary">A bubble over other apps. Tap to lock, drag to move</string>
     <string name="trigger_bluetooth">When a Bluetooth device connects</string>
     <string name="trigger_bluetooth_summary">For example your helmet intercom</string>
     <string name="bluetooth_device">Device</string>
@@ -64,6 +63,6 @@
     <string name="knob_position_reset">Lock icon is back on the left</string>
 
     <string name="grant_title">One-time permission</string>
-    <string name="grant_message">Connect the phone to a computer with USB debugging on and run:\n\n%1$s\n\nIt stays granted through updates and reboots.</string>
+    <string name="grant_message">Lets RainLock switch its accessibility service on only while locked, and block Circle to Search.\n\nConnect the phone to a computer with USB debugging on and run:\n\n%1$s\n\nIt stays granted through updates and reboots.</string>
     <string name="copy">Copy</string>
 </resources>

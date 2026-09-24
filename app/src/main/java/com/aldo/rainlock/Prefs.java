@@ -11,14 +11,11 @@ public final class Prefs {
     public static final String UNLOCK_SLIDE = "unlock_slide";
     public static final String UNLOCK_DOUBLE_TAP = "unlock_double_tap";
     public static final String TRIGGER_TILE = "trigger_tile";
-    public static final String TRIGGER_FLOATING = "trigger_floating";
     public static final String TRIGGER_BLUETOOTH = "trigger_bluetooth";
     public static final String BLUETOOTH_DEVICE = "bluetooth_device";
     public static final String BLUETOOTH_AUTO_UNLOCK = "bluetooth_auto_unlock";
     public static final String GUARD_SEARCH = "guard_search";
     public static final String KEEP_SCREEN_ON = "keep_screen_on";
-    public static final String FLOATING_X = "floating_x";
-    public static final String FLOATING_Y = "floating_y";
     public static final String KNOB_RIGHT = "knob_right";
     public static final String KNOB_Y = "knob_y";
 

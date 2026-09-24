@@ -38,8 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean lockIfAsked(Intent intent) {
         if (!ACTION_LOCK.equals(intent.getAction())) return false;
-        RainLockService service = RainLockService.running();
-        if (service != null) service.lock();
+        RainLockService.requestLock(this);
         finish();
         return true;
     }
