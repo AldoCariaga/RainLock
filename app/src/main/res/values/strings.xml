@@ -5,7 +5,7 @@
     <string name="tile_ready">Tap to lock</string>
     <string name="tile_needs_setup">Tap to set up</string>
 
-    <string name="a11y_description">Blocks touches while you ride in the rain. When you lock, RainLock covers the screen with an invisible layer that swallows every touch, and listens for volume-down presses so you can unlock with the button. It does not read what is on your screen. With the adb permission, RainLock switches this on when you lock and off again when you unlock.</string>
+    <string name="a11y_description">Blocks touches while you ride in the rain. When you lock, RainLock covers the screen with an invisible layer that swallows every touch, and listens for volume-down presses so you can unlock with the button. It does not read what is on your screen. With the one-time permission, RainLock switches this on when you lock and off again when you unlock.</string>
 
     <string name="hint_slide">Slide to unlock  ›</string>
     <string name="hint_slide_left">‹  Slide to unlock</string>
@@ -15,9 +15,9 @@
 
     <string name="cat_setup">Setup</string>
     <string name="status_service">Accessibility service</string>
-    <string name="status_service_off">Off. Tap, then Installed apps → RainLock. Or grant the adb permission below</string>
-    <string name="status_guard">adb permission</string>
-    <string name="status_guard_missing">Not granted. Tap for the one-time adb command</string>
+    <string name="status_service_off">Off. Tap, then Installed apps → RainLock. Or grant the one-time permission below</string>
+    <string name="status_guard">One-time permission</string>
+    <string name="status_guard_missing">Not granted. Tap to grant it with Shizuku or a computer</string>
     <string name="lock_now">Lock now</string>
     <string name="lock_now_summary">Locks, then returns to the app you were using</string>
 
@@ -44,7 +44,7 @@
     <string name="cat_while_locked">While locked</string>
     <string name="guard_search">Block Circle to Search</string>
     <string name="guard_summary">Turned off while locked, back on when you unlock</string>
-    <string name="guard_summary_no_permission">Needs the one-time adb permission (see Setup)</string>
+    <string name="guard_summary_no_permission">Needs the one-time permission (see Setup)</string>
     <string name="keep_screen_on">Keep the screen on</string>
     <string name="keep_screen_on_summary">So the phone doesn\'t lock itself mid-ride</string>
     <string name="knob_position">Lock icon position</string>
@@ -52,6 +52,13 @@
     <string name="knob_position_reset">Lock icon is back on the left</string>
 
     <string name="grant_title">One-time permission</string>
-    <string name="grant_message">Lets RainLock switch its accessibility service on only while locked, and block Circle to Search.\n\nConnect the phone to a computer with USB debugging on and run:\n\n%1$s\n\nNo computer? Turn on Wireless debugging and run it from an adb app on the phone itself.\n\nIt stays granted through updates and reboots.</string>
-    <string name="copy">Copy</string>
+    <string name="grant_message">Lets RainLock switch its accessibility service on only while locked, and block Circle to Search. It stays granted through updates and reboots.\n\nNo computer: install Shizuku and start it with Wireless debugging (Shizuku shows how), then tap Use Shizuku.\n\nWith a computer: turn on USB debugging and run:\n\n%1$s</string>
+    <string name="copy_command">Copy command</string>
+    <string name="grant_shizuku">Use Shizuku</string>
+    <string name="shizuku_install">Install Shizuku, start it, then tap Use Shizuku again</string>
+    <string name="shizuku_start">Start Shizuku, then come back and tap Use Shizuku again</string>
+    <string name="shizuku_granting">Granting…</string>
+    <string name="shizuku_denied">RainLock was denied in Shizuku. Allow it in Shizuku, then try again</string>
+    <string name="grant_done">Permission granted</string>
+    <string name="grant_failed">Couldn\'t grant it: %1$s</string>
 </resources>

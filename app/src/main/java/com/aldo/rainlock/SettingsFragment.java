@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Icon;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -29,6 +30,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.TwoStatePreference;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.aldo.rainlock.grant.ShizukuGrant;
 import com.aldo.rainlock.guard.SearchGestureGuard;
 
 import java.util.ArrayList;
@@ -64,7 +66,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
         find(STATUS_GUARD).setOnPreferenceClickListener(p -> {
-            showGrantCommand();
+            showGrantOptions();
             return true;
         });
         find(LOCK_NOW).setOnPreferenceClickListener(p -> {
@@ -127,17 +129,46 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         requireActivity().moveTaskToBack(true);  // back to the app underneath, e.g. Maps
     }
 
-    private void showGrantCommand() {
+    private void showGrantOptions() {
         Context context = requireContext();
         String command = "adb shell pm grant " + context.getPackageName() + " "
                 + Manifest.permission.WRITE_SECURE_SETTINGS;
         new MaterialAlertDialogBuilder(context)
                 .setTitle(R.string.grant_title)
                 .setMessage(getString(R.string.grant_message, command))
-                .setPositiveButton(R.string.copy, (dialog, which) -> context.getSystemService(ClipboardManager.class)
+                .setPositiveButton(R.string.grant_shizuku, (dialog, which) -> grantWithShizuku())
+                .setNeutralButton(R.string.copy_command, (dialog, which) -> context.getSystemService(ClipboardManager.class)
                         .setPrimaryClip(ClipData.newPlainText("adb", command)))
-                .setNegativeButton(android.R.string.cancel, null)
-                .show();
+                .show();  // no Cancel: tapping outside closes it, and two buttons fit on one row
+    }
+
+    /** Takes the user through whichever Shizuku step is next: install it, start it, or grant. */
+    private void grantWithShizuku() {
+        Context context = requireContext();
+        switch (ShizukuGrant.status(context)) {
+            case NOT_INSTALLED:
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details?id=" + ShizukuGrant.PACKAGE)));
+                toast(R.string.shizuku_install);
+                break;
+            case NOT_RUNNING:
+                Intent open = context.getPackageManager().getLaunchIntentForPackage(ShizukuGrant.PACKAGE);
+                if (open != null) startActivity(open);
+                toast(R.string.shizuku_start);
+                break;
+            case READY:
+                toast(R.string.shizuku_granting);
+                ShizukuGrant.grant(context, error -> {
+                    if (!isAdded()) return;
+                    if (error == null) {
+                        toast(R.string.grant_done);
+                        refreshStatus();
+                    } else {
+                        Toast.makeText(requireContext(), getString(R.string.grant_failed, error), Toast.LENGTH_LONG).show();
+                    }
+                });
+                break;
+        }
     }
 
     /** Refuses to switch off the last unlock method. */
