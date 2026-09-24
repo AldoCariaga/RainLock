@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/cat_setup">
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="status_service"
+            app:title="@string/status_service" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="status_guard"
+            app:title="@string/status_guard" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="status_phone"
+            app:selectable="false"
+            app:title="@string/status_phone" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="lock_now"
+            app:summary="@string/lock_now_summary"
+            app:title="@string/lock_now" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/cat_unlock">
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="unlock_volume"
+            app:summary="@string/unlock_volume_summary"
+            app:title="@string/unlock_volume" />
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="unlock_slide"
+            app:summary="@string/unlock_slide_summary"
+            app:title="@string/unlock_slide" />
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="unlock_double_tap"
+            app:summary="@string/unlock_double_tap_summary"
+            app:title="@string/unlock_double_tap" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/cat_lock">
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="trigger_tile"
+            app:summary="@string/trigger_tile_summary"
+            app:title="@string/trigger_tile" />
+        <Preference
+            app:dependency="trigger_tile"
+            app:iconSpaceReserved="false"
+            app:key="add_tile"
+            app:title="@string/add_tile" />
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="trigger_floating"
+            app:summary="@string/trigger_floating_summary"
+            app:title="@string/trigger_floating" />
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="trigger_bluetooth"
+            app:summary="@string/trigger_bluetooth_summary"
+            app:title="@string/trigger_bluetooth" />
+        <ListPreference
+            app:dependency="trigger_bluetooth"
+            app:entries="@array/empty"
+            app:entryValues="@array/empty"
+            app:iconSpaceReserved="false"
+            app:key="bluetooth_device"
+            app:title="@string/bluetooth_device"
+            app:useSimpleSummaryProvider="true" />
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:dependency="trigger_bluetooth"
+            app:iconSpaceReserved="false"
+            app:key="bluetooth_auto_unlock"
+            app:title="@string/bluetooth_auto_unlock" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/cat_while_locked">
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="guard_search"
+            app:summary="@string/guard_summary"
+            app:title="@string/guard_search" />
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="keep_screen_on"
+            app:summary="@string/keep_screen_on_summary"
+            app:title="@string/keep_screen_on" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="knob_reset"
+            app:summary="@string/knob_position_summary"
+            app:title="@string/knob_position" />
+    </PreferenceCategory>
+</PreferenceScreen>
