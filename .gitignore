@@ -6,6 +6,7 @@ local.properties
 
 # Release signing: never commit the key or its password
 keystore.properties
+keystore/
 *.jks
 *.keystore
 dist/
