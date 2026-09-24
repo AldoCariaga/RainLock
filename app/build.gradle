@@ -2,6 +2,11 @@ plugins {
     id 'com.android.application'
 }
 
+// Release key and password live outside git; README.md "Release builds" sets it up
+def keystoreFile = rootProject.file('keystore.properties')
+def keystore = new Properties()
+if (keystoreFile.exists()) keystoreFile.withInputStream { keystore.load(it) }
+
 android {
     namespace 'com.aldo.rainlock'
     compileSdk 35
@@ -14,9 +19,21 @@ android {
         versionName "1.0"
     }
 
+    signingConfigs {
+        release {
+            if (keystoreFile.exists()) {
+                storeFile file(keystore['storeFile'])
+                storePassword keystore['storePassword']
+                keyAlias keystore['keyAlias']
+                keyPassword keystore['keyPassword']
+            }
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            if (keystoreFile.exists()) signingConfig signingConfigs.release  // else the APK comes out unsigned
         }
     }
 

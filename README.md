@@ -18,6 +18,12 @@ on the bottom edge keeps triggering. No ads, no internet permission.
    RainLock → ⋮ → Allow restricted settings, then try again. A service turned on by hand stays on
    all the time, and Circle to Search isn't blocked.
 
+## Release builds
+
+Copy `keystore.properties.example` to `keystore.properties` and point it at your own key; git
+ignores it. `.\build-release.ps1` then builds a signed APK into `dist\`. Every update has to be
+signed with the same key to install over the last one.
+
 ## How the lock works
 
 - **Touches:** a full-screen `TYPE_ACCESSIBILITY_OVERLAY`. Accessibility overlays sit above the

@@ -3,3 +3,9 @@ build/
 local.properties
 *.iml
 .idea/
+
+# Release signing: never commit the key or its password
+keystore.properties
+*.jks
+*.keystore
+dist/
