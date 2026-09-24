@@ -11,9 +11,11 @@ on the bottom edge keeps triggering. No ads, no internet permission.
 2. Pick unlock and lock methods in the app. There's no accessibility switch to turn on: with the
    adb permission, RainLock switches its accessibility service on when you lock and off when you
    unlock.
-3. Without the adb permission, turn the service on by hand instead: in the app tap **Accessibility
-   service**. If Android says "Restricted setting": Settings → Apps → RainLock → ⋮ → Allow
-   restricted settings, then try again. The service then stays on all the time.
+3. Without the adb permission, the app shows a **Setup** section. Either tap **adb permission** for
+   the grant command, which also runs from the phone itself with Wireless debugging and an
+   on-device adb app, or tap **Accessibility service** and turn it on by hand. If Android says
+   "Restricted setting": Settings → Apps → RainLock → ⋮ → Allow restricted settings, then try
+   again. A service turned on by hand stays on all the time, and Circle to Search isn't blocked.
 
 ## How the lock works
 

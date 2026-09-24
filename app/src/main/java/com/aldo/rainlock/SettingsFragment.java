@@ -29,20 +29,18 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.TwoStatePreference;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.aldo.rainlock.guard.DeviceProfile;
 import com.aldo.rainlock.guard.SearchGestureGuard;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
+    private static final String CAT_SETUP = "cat_setup";
     private static final String STATUS_SERVICE = "status_service";
     private static final String STATUS_GUARD = "status_guard";
-    private static final String STATUS_PHONE = "status_phone";
     private static final String LOCK_NOW = "lock_now";
     private static final String ADD_TILE = "add_tile";
     private static final String KNOB_RESET = "knob_reset";
@@ -117,27 +115,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         if (service == null) new SearchGestureGuard(context).restore();
 
         boolean granted = SearchGestureGuard.hasPermission(context);
-        Preference serviceStatus = find(STATUS_SERVICE);
-        serviceStatus.setSummary(granted ? R.string.status_service_on_demand
-                : service != null ? R.string.status_service_on : R.string.status_service_off);
-        serviceStatus.setSelectable(!granted);  // the app switches it, nothing to do in Settings
-        find(STATUS_GUARD).setSummary(granted ? R.string.status_guard_granted : R.string.status_guard_missing);
-        find(STATUS_PHONE).setSummary(describePhone(context));
+        // Setup only shows what's left to do; without the permission, turning the service on by hand also works
+        find(CAT_SETUP).setVisible(!granted);
+        find(STATUS_SERVICE).setVisible(service == null);
         find(LOCK_NOW).setEnabled(RainLockService.canLock(context));
         find(Prefs.GUARD_SEARCH).setSummary(granted ? R.string.guard_summary : R.string.guard_summary_no_permission);
-    }
-
-    private String describePhone(Context context) {
-        DeviceProfile phone = DeviceProfile.current();
-        int nav = DeviceProfile.navigationMode(context.getContentResolver());
-        int navText = nav == 2 ? R.string.nav_gestures
-                : nav == 0 ? R.string.nav_buttons
-                : nav == 1 ? R.string.nav_two_buttons
-                : R.string.nav_unknown;
-        String brand = phone.manufacturer.isEmpty() ? ""
-                : phone.manufacturer.substring(0, 1).toUpperCase(Locale.ROOT) + phone.manufacturer.substring(1);
-        return getString(R.string.status_phone_summary, brand, phone.model, phone.androidVersion,
-                getString(navText), getString(phone.searchKeysVerified ? R.string.keys_verified : R.string.keys_untested));
     }
 
     private void lockNow() {

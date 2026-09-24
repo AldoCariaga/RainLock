@@ -15,20 +15,9 @@
 
     <string name="cat_setup">Setup</string>
     <string name="status_service">Accessibility service</string>
-    <string name="status_service_on">On all the time. With the adb permission below it\'s only on while locked, so banking apps don\'t flag it</string>
     <string name="status_service_off">Off. Tap, then Installed apps → RainLock. Or grant the adb permission below</string>
-    <string name="status_service_on_demand">Switched on only while locked, so banking apps don\'t flag it</string>
     <string name="status_guard">adb permission</string>
-    <string name="status_guard_granted">Granted</string>
     <string name="status_guard_missing">Not granted. Tap for the one-time adb command</string>
-    <string name="status_phone">This phone</string>
-    <string name="status_phone_summary">%1$s %2$s · Android %3$s · %4$s\nCircle to Search settings: %5$s</string>
-    <string name="nav_gestures">gestures</string>
-    <string name="nav_buttons">3 buttons</string>
-    <string name="nav_two_buttons">2 buttons</string>
-    <string name="nav_unknown">navigation unknown</string>
-    <string name="keys_verified">tested on this brand</string>
-    <string name="keys_untested">best guess, untested on this brand</string>
     <string name="lock_now">Lock now</string>
     <string name="lock_now_summary">Locks, then returns to the app you were using</string>
 
@@ -63,6 +52,6 @@
     <string name="knob_position_reset">Lock icon is back on the left</string>
 
     <string name="grant_title">One-time permission</string>
-    <string name="grant_message">Lets RainLock switch its accessibility service on only while locked, and block Circle to Search.\n\nConnect the phone to a computer with USB debugging on and run:\n\n%1$s\n\nIt stays granted through updates and reboots.</string>
+    <string name="grant_message">Lets RainLock switch its accessibility service on only while locked, and block Circle to Search.\n\nConnect the phone to a computer with USB debugging on and run:\n\n%1$s\n\nNo computer? Turn on Wireless debugging and run it from an adb app on the phone itself.\n\nIt stays granted through updates and reboots.</string>
     <string name="copy">Copy</string>
 </resources>
