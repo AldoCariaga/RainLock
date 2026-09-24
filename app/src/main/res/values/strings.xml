@@ -43,8 +43,9 @@
 
     <string name="cat_while_locked">While locked</string>
     <string name="guard_search">Block Circle to Search</string>
-    <string name="guard_summary">Turned off while locked, back on when you unlock</string>
-    <string name="guard_summary_no_permission">Needs the one-time permission (see Setup)</string>
+    <string name="guard_summary_on">Even when a swipe up brings the navigation bar back</string>
+    <string name="guard_summary_off">Only while the navigation bar is hidden, not for the few seconds after a swipe up shows it</string>
+    <string name="guard_summary_no_permission">Only while the navigation bar is hidden. The one-time permission blocks it after a swipe up too (see Setup)</string>
     <string name="keep_screen_on">Keep the screen on</string>
     <string name="keep_screen_on_summary">So the phone doesn\'t lock itself mid-ride</string>
     <string name="knob_position">Lock icon position</string>
@@ -52,7 +53,7 @@
     <string name="knob_position_reset">Lock icon is back on the left</string>
 
     <string name="grant_title">One-time permission</string>
-    <string name="grant_message">Lets RainLock switch its accessibility service on only while locked, and block Circle to Search. It stays granted through updates and reboots.\n\nNo computer: install Shizuku and start it with Wireless debugging (Shizuku shows how), then tap Use Shizuku.\n\nWith a computer: turn on USB debugging and run:\n\n%1$s</string>
+    <string name="grant_message">Lets RainLock switch its accessibility service on only while locked, and keep Circle to Search blocked when a swipe up brings the navigation bar back. It stays granted through updates and reboots.\n\nNo computer: install Shizuku and start it with Wireless debugging (Shizuku shows how), then tap Use Shizuku.\n\nWith a computer: turn on USB debugging and run:\n\n%1$s</string>
     <string name="copy_command">Copy command</string>
     <string name="grant_shizuku">Use Shizuku</string>
     <string name="shizuku_install">Install Shizuku, start it, then tap Use Shizuku again</string>

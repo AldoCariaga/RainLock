@@ -90,7 +90,8 @@
             app:defaultValue="true"
             app:iconSpaceReserved="false"
             app:key="guard_search"
-            app:summary="@string/guard_summary"
+            app:summaryOff="@string/guard_summary_off"
+            app:summaryOn="@string/guard_summary_on"
             app:title="@string/guard_search" />
         <SwitchPreferenceCompat
             app:defaultValue="true"

@@ -10,7 +10,10 @@ import android.util.Log;
 
 import java.util.Map;
 
-/** Turns Circle to Search's hold-the-handle gesture off while locked. Needs the adb-granted permission (README.md). */
+/**
+ * Turns Circle to Search's hold-the-handle gesture off while locked. The hidden nav bar already blocks it;
+ * this covers the seconds after a swipe up shows the bar. Needs the adb-granted permission (README.md).
+ */
 public final class SearchGestureGuard {
     private static final String TAG = "RainLock";
     private static final String STATE_FILE = "search_guard";

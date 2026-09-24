@@ -16,7 +16,8 @@ on the bottom edge keeps triggering. No ads, no internet permission.
    tap again), and **Copy command** gives the adb command for a computer. Or tap **Accessibility
    service** and turn it on by hand. If Android says "Restricted setting": Settings → Apps →
    RainLock → ⋮ → Allow restricted settings, then try again. A service turned on by hand stays on
-   all the time, and Circle to Search isn't blocked.
+   all the time, and Circle to Search is only blocked while the navigation bar is hidden (see
+   How the lock works).
 
 ## Release builds
 
@@ -45,9 +46,13 @@ signed with the same key to install over the last one.
     `setSystemGestureExclusionRects`, so the overlay excludes both full edges from the back swipe.
   - The trade-off: while locked, the app underneath (Maps, Waze) loses input focus. It isn't
     paused.
-- **Circle to Search:** switched off while locked by writing its settings (below).
+- **Circle to Search:** hiding the navigation bar blocks it, but a swipe up shows the bar for a
+  few seconds, and holding the handle then opens it. With the adb permission the lock closes that
+  gap by switching it off through its settings (below). **Block Circle to Search** in the app
+  turns those writes off, leaving only the hidden bar.
 
-Tested on the Galaxy S22+ (One UI 8, Android 16) with `adb shell input` swipes:
+Tested on the Galaxy S22+ (One UI 8, Android 16) with `adb shell input` swipes, and the Circle to
+Search rows by hand:
 
 | While locked | Result |
 |---|---|
@@ -56,7 +61,8 @@ Tested on the Galaxy S22+ (One UI 8, Android 16) with `adb shell input` swipes:
 | One swipe up from the bottom | Blocked (reveals the bar) |
 | Two swipes up 4 s apart | Blocked |
 | Two swipes up 2 s apart | **Goes home.** The first swipe shows the bar for a few seconds |
-| Hold the handle (Circle to Search) | Blocked by the settings below |
+| Hold the bottom edge while the bar is hidden | Blocked, even without the settings |
+| Swipe up once, then hold the handle while the bar shows | Blocked by the settings below. **Opens Circle to Search** without them |
 
 ## Circle to Search settings
 

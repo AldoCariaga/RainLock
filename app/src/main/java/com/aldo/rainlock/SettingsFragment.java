@@ -121,7 +121,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         find(CAT_SETUP).setVisible(!granted);
         find(STATUS_SERVICE).setVisible(service == null);
         find(LOCK_NOW).setEnabled(RainLockService.canLock(context));
-        find(Prefs.GUARD_SEARCH).setSummary(granted ? R.string.guard_summary : R.string.guard_summary_no_permission);
+        TwoStatePreference guard = find(Prefs.GUARD_SEARCH);
+        guard.setSummaryOn(granted ? R.string.guard_summary_on : R.string.guard_summary_no_permission);
+        guard.setSummaryOff(granted ? R.string.guard_summary_off : R.string.guard_summary_no_permission);
     }
 
     private void lockNow() {
