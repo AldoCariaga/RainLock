@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- "Display over other apps", for Basic Mode's lock -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <!-- Only asked for when the helmet Bluetooth trigger is switched on -->
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <!-- Not grantable in the app: adb shell pm grant, see README.md -->
@@ -32,6 +34,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Its own task, out of Recents, so closing it goes back to the app underneath, not to settings -->
+        <activity
+            android:name=".LockActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.NoDisplay" />
 
         <service
             android:name=".RainLockService"

@@ -7,22 +7,26 @@
         app:summary="@string/lock_now_summary"
         app:title="@string/lock_now" />
 
-    <!-- Hidden once the adb permission is granted: the app then handles the service itself.
-         With the service on by hand, the permission stays here as an upgrade. -->
+    <!-- Titles and summaries follow the mode in use; SettingsFragment.refreshStatus() -->
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        app:key="cat_setup"
-        app:title="@string/cat_setup">
+        app:key="cat_mode"
+        app:title="@string/cat_mode_pick">
         <Preference
             app:iconSpaceReserved="false"
-            app:key="status_service"
-            app:summary="@string/status_service_summary"
-            app:title="@string/status_service" />
+            app:key="mode_basic"
+            app:summary="@string/mode_basic_summary"
+            app:title="@string/mode_basic" />
         <Preference
             app:iconSpaceReserved="false"
-            app:key="status_guard"
-            app:summary="@string/status_guard_summary"
-            app:title="@string/status_guard" />
+            app:key="mode_better"
+            app:summary="@string/mode_better_summary"
+            app:title="@string/mode_better" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="mode_best"
+            app:summary="@string/mode_best_summary"
+            app:title="@string/mode_best" />
     </PreferenceCategory>
 
     <PreferenceCategory

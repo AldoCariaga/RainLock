@@ -11,16 +11,22 @@
     <string name="hint_slide_left">‹  Slide to unlock</string>
     <string name="hint_double_tap">Double-tap the lock</string>
     <string name="hint_volume">Press volume down 3 times</string>
-    <string name="lock_failed">RainLock couldn\'t switch its accessibility service on. Open RainLock and check Setup</string>
+    <string name="lock_failed">RainLock couldn\'t switch its accessibility service on. Open RainLock and check its mode</string>
+    <string name="lock_not_set_up">RainLock isn\'t set up yet. Open it and pick a mode</string>
 
-    <string name="cat_setup">Setup: pick one</string>
-    <string name="cat_upgrade">Optional upgrade</string>
-    <string name="status_service">Basic: accessibility service</string>
-    <string name="status_service_summary">No computer needed. But it stays on all the time, which some banking apps object to, and Circle to Search can open for a few seconds after a swipe up</string>
-    <string name="status_guard">Better: one-time permission</string>
-    <string name="status_guard_summary">Needs a computer, or Shizuku with Wireless debugging. The service is then on only while locked, and Circle to Search stays blocked after a swipe up</string>
-    <string name="service_title">Accessibility service</string>
-    <string name="service_message">In Accessibility, tap Installed apps → RainLock and turn it on.\n\nIf Android says \"Restricted setting\", tap App info, then ⋮ → Allow restricted settings, and try again.\n\nThe catches: it stays on all the time, and some banking apps warn about that or won\'t open. And Circle to Search is only blocked while the navigation bar is hidden. A swipe up brings the bar back for a few seconds, and holding it then opens Circle to Search.\n\nThe one-time permission fixes both.</string>
+    <string name="cat_mode_pick">Setup: pick a mode</string>
+    <string name="cat_mode">Mode</string>
+    <string name="mode_in_use">%1$s (in use)</string>
+    <string name="mode_tap_to_use">Set up, tap to use it. %1$s</string>
+    <string name="mode_basic">Basic Mode</string>
+    <string name="mode_basic_summary">Needs Display over other apps, no accessibility service. But a swipe brings the status or navigation bar back for a few seconds, and rain on it then gets through, Circle to Search included</string>
+    <string name="mode_better">Better Mode</string>
+    <string name="mode_better_summary">Accessibility service, turned on by hand. The lock covers the bars, but the service stays on all the time, which some banking apps object to, and Circle to Search can open for a few seconds after a swipe up</string>
+    <string name="mode_best">Best Mode</string>
+    <string name="mode_best_summary">Needs a computer, or Shizuku with Wireless debugging. The service is on only while locked, and Circle to Search stays blocked</string>
+    <string name="basic_message">Find RainLock in the list and allow it.\n\nIf Android says \"Restricted setting\", tap App info, then ⋮ → Allow restricted settings, and try again.\n\nThe catch: this lock sits under the status and navigation bars, so it hides them. A swipe brings them back for a few seconds, and rain on them then gets through: it can pull the notification panel down or open Circle to Search. Better Mode covers the bars, and Best Mode also keeps Circle to Search off.</string>
+    <string name="open_overlay_settings">Open settings</string>
+    <string name="service_message">In Accessibility, tap Installed apps → RainLock and turn it on.\n\nIf Android says \"Restricted setting\", tap App info, then ⋮ → Allow restricted settings, and try again.\n\nThe catches: it stays on all the time, and some banking apps warn about that or won\'t open. And Circle to Search is only blocked while the navigation bar is hidden. A swipe up brings the bar back for a few seconds, and holding it then opens Circle to Search.\n\nBest Mode fixes both.</string>
     <string name="open_accessibility">Open Accessibility</string>
     <string name="app_info">App info</string>
     <string name="lock_now">Lock now</string>
@@ -50,14 +56,13 @@
     <string name="guard_search">Block Circle to Search</string>
     <string name="guard_summary_on">Even when a swipe up brings the navigation bar back</string>
     <string name="guard_summary_off">Only while the navigation bar is hidden, not for the few seconds after a swipe up shows it</string>
-    <string name="guard_summary_no_permission">Only while the navigation bar is hidden. The one-time permission blocks it after a swipe up too (see Setup)</string>
+    <string name="guard_summary_no_permission">Only while the navigation bar is hidden. Best Mode blocks it after a swipe up too</string>
     <string name="keep_screen_on">Keep the screen on</string>
     <string name="keep_screen_on_summary">So the phone doesn\'t lock itself mid-ride</string>
     <string name="knob_position">Lock icon position</string>
     <string name="knob_position_summary">While locked, hold the icon for a second, then drag it. Tap here to put it back</string>
     <string name="knob_position_reset">Lock icon is back on the left</string>
 
-    <string name="grant_title">One-time permission</string>
     <string name="grant_message">Lets RainLock switch its accessibility service on only while locked, and keep Circle to Search blocked when a swipe up brings the navigation bar back. It stays granted through updates and reboots.\n\nNo computer: install Shizuku and start it with Wireless debugging (Shizuku shows how), then tap Use Shizuku.\n\nWith a computer: turn on USB debugging and run:\n\n%1$s</string>
     <string name="copy_command">Copy command</string>
     <string name="grant_shizuku">Use Shizuku</string>

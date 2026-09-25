@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.aldo.rainlock.R;
 import com.aldo.rainlock.unlock.PressSequence;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 /** Full-screen touch sink with the lock knob. Only the knob reacts: unlock gestures, or hold-then-drag to move it. */
 @SuppressLint("ViewConstructor")
@@ -35,7 +37,9 @@ final class LockView extends ViewGroup {
     private final SharedPreferences prefs;
     private final boolean slide;
     private final boolean doubleTap;
+    private final boolean hideStatusBar;
     private final Runnable onUnlock;
+    private final Predicate<KeyEvent> onKey;
     private final KnobView knob;
     private final TextView track;
     private final GradientDrawable trackBackground = new GradientDrawable();
@@ -60,12 +64,15 @@ final class LockView extends ViewGroup {
     private boolean dragging;
     private boolean moving;
 
-    LockView(Context context, SharedPreferences prefs, boolean slide, boolean doubleTap, Runnable onUnlock) {
+    LockView(Context context, SharedPreferences prefs, boolean slide, boolean doubleTap, boolean hideStatusBar,
+            Runnable onUnlock, Predicate<KeyEvent> onKey) {
         super(context);
         this.prefs = prefs;
         this.slide = slide;
         this.doubleTap = doubleTap;
+        this.hideStatusBar = hideStatusBar;
         this.onUnlock = onUnlock;
+        this.onKey = onKey;
         onRight = prefs.getBoolean(Prefs.KNOB_RIGHT, false);
         knobY = prefs.getFloat(Prefs.KNOB_Y, 0.55f);
         float density = getResources().getDisplayMetrics().density;
@@ -103,7 +110,7 @@ final class LockView extends ViewGroup {
         WindowInsetsController bars = getWindowInsetsController();
         if (bars != null) {
             bars.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
-            bars.hide(WindowInsets.Type.navigationBars());
+            bars.hide(hideStatusBar ? WindowInsets.Type.systemBars() : WindowInsets.Type.navigationBars());
         }
     }
 
@@ -143,6 +150,12 @@ final class LockView extends ViewGroup {
         int trackLeft = onRight ? width - track.getMeasuredWidth() : 0;
         knob.layout(knobLeft, top, knobLeft + knob.getMeasuredWidth(), top + knobHeight);
         track.layout(trackLeft, top, trackLeft + track.getMeasuredWidth(), top + knobHeight);
+    }
+
+    /** Basic Mode's volume unlock. With the service, its key filter gets volume down first. */
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        return onKey.test(event) || super.dispatchKeyEvent(event);
     }
 
     @SuppressLint("ClickableViewAccessibility")  // a touch sink has no click to perform

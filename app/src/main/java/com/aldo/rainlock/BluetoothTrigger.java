@@ -20,11 +20,10 @@ public final class BluetoothTrigger extends BroadcastReceiver {
         if (device == null || chosen == null || !chosen.equals(device.getAddress())) return;
         // Both are protected broadcasts, so checking the action keeps other apps from faking them
         if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(intent.getAction())) {
-            RainLockService.requestLock(context);
+            LockController.lock(context);
         } else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(intent.getAction())
                 && prefs.getBoolean(Prefs.BLUETOOTH_AUTO_UNLOCK, true)) {
-            RainLockService service = RainLockService.running();
-            if (service != null) service.unlock();
+            LockController.unlock();
         }
     }
 }

@@ -8,20 +8,51 @@ on the bottom edge keeps triggering. No ads, no internet permission.
 1. Phone on USB with USB debugging on. From this folder run `.\build-and-run.ps1`. It builds,
    installs, grants the adb permission (below) and opens the app. It needs JAVA_HOME (JDK 17)
    and ANDROID_HOME set.
-2. Pick unlock and lock methods in the app. There's no accessibility switch to turn on: with the
-   adb permission, RainLock switches its accessibility service on when you lock and off when you
-   unlock.
-3. Without the adb permission, the app shows a **Setup** section with two options:
-   - **Basic: accessibility service** needs no computer: turn the service on by hand. If Android
-     says "Restricted setting": Settings → Apps → RainLock → ⋮ → Allow restricted settings, then
-     try again. The catches: the service stays on all the time, which banking apps flag, and
-     Circle to Search is only blocked while the navigation bar is hidden (see How the lock works).
-   - **Better: one-time permission** fixes both, but needs adb. **Use Shizuku** grants it from the
-     phone (install Shizuku, start it with Wireless debugging, tap again), and **Copy command**
-     gives the adb command for a computer.
+2. Pick unlock and lock methods in the app. With the adb permission that's all: RainLock is in
+   Best Mode, and switches its accessibility service on when you lock and off when you unlock.
+3. Without it, the app opens on **Setup: pick a mode** (see Modes). Each row's dialog has the
+   steps, including the fix for "Restricted setting": Settings → Apps → RainLock → ⋮ → Allow
+   restricted settings. **Best Mode**'s **Use Shizuku** grants the permission from the phone
+   (install Shizuku, start it with Wireless debugging, tap again), and **Copy command** gives the
+   adb command for a computer.
 
-   With the basic option on, Setup becomes **Optional upgrade** and keeps only the permission.
-   Granting it switches the hand-enabled service off until the next lock.
+   Tapping a mode that's set up switches to it, so a phone in Best Mode can try Basic. Tapping one
+   that isn't shows its steps, and it's used once it's ready. Better Mode is hidden with the
+   permission, since the app then switches the service off between locks. Granting the permission
+   while the service is on by hand switches it off until the next lock.
+
+## Modes
+
+RainLock uses the mode picked in the app if it's set up, otherwise the best one that is
+(`Mode.current`). With the adb permission, Circle to Search is switched off while locked in any
+mode, as long as **Block Circle to Search** is on.
+
+| | Basic | Better | Best |
+|---|---|---|---|
+| Needs | Display over other apps | The accessibility service, on by hand | The adb permission, from a computer or Shizuku |
+| Lock window | Ordinary overlay, under the bars, so it hides both | Accessibility overlay, above the bars | Same as Better |
+| Accessibility service | Never on | On all the time, which banking apps flag | On only while locked |
+| While a swipe has brought a bar back | Rain on the bar gets through: it can pull the shade down or open Circle to Search | Circle to Search can open | Blocked |
+| Volume unlock | The focused lock window gets the key | The service's key filter | Same as Better |
+| Locking from the tile closes the panel by | Opening an invisible activity, `LockActivity` | The service's global action | Same as Better |
+
+Basic Mode on the S22+ (One UI 8, Android 16), with `adb shell input`:
+
+| While locked in Basic Mode | Result |
+|---|---|
+| Status and navigation bars | Hidden: the ordinary overlay takes focus like the accessibility one |
+| Tap an app icon underneath | Blocked |
+| Back swipe from either edge | Blocked |
+| One swipe up from the bottom | Blocked (reveals the bar) |
+| Two swipes up quickly | **Goes home**, with the lock still on top |
+| Two swipes down from the top 4 s apart | Blocked |
+| Two swipes down 2 s apart | **Pulls the shade down** over the lock. Closing it gives the lock focus back |
+| Volume down three times | Unlocks, and the presses don't change the volume. Injected keys work here, since they go to the focused window |
+| Lock from the tile | Closes the panel and returns to the app underneath |
+| The Settings app in front | **Hides the lock.** Settings hides other apps' overlays, so rain that reaches Settings through the shade isn't blocked there |
+
+While locked, only the visible overlay keeps the app running. Android ranks an app with one as
+perceptible, so it isn't killed in the normal course, but there's no foreground service.
 
 ## Release builds
 
@@ -31,12 +62,14 @@ signed with the same key to install over the last one.
 
 ## How the lock works
 
+This describes Better and Best Mode; Modes covers how Basic differs.
+
 - **Touches:** a full-screen `TYPE_ACCESSIBILITY_OVERLAY`. Accessibility overlays sit above the
   status and navigation bars; ordinary "draw over apps" overlays sit below them, which is why
   typical touch-lock apps leak there.
 - **Volume unlock:** the accessibility service filters key events (`flagRequestFilterKeyEvents`).
-- **Service only on while locked:** banking apps flag any accessibility service that's switched on,
-  so RainLock keeps its own off between locks. A lock adds it to
+- **Service only on while locked (Best Mode):** banking apps flag any accessibility service
+  that's switched on, so RainLock keeps its own off between locks. A lock adds it to
   `secure/enabled_accessibility_services` and it locks as soon as it connects (about 200 ms on
   the S22+). Unlocking calls `disableSelf()`. If the service comes on for any other reason, such
   as a reboot or crash mid-lock, it restores Circle to Search and switches straight back off. The
@@ -55,8 +88,8 @@ signed with the same key to install over the last one.
   gap by switching it off through its settings (below). **Block Circle to Search** in the app
   turns those writes off, leaving only the hidden bar.
 
-Tested on the Galaxy S22+ (One UI 8, Android 16) with `adb shell input` swipes, and the Circle to
-Search rows by hand:
+Tested on the Galaxy S22+ (One UI 8, Android 16) in Best Mode, with `adb shell input` swipes and
+the Circle to Search rows by hand:
 
 | While locked | Result |
 |---|---|

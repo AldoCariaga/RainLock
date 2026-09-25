@@ -18,6 +18,7 @@ public final class Prefs {
     public static final String KEEP_SCREEN_ON = "keep_screen_on";
     public static final String KNOB_RIGHT = "knob_right";
     public static final String KNOB_Y = "knob_y";
+    public static final String MODE = "mode";  // a Mode name; unset means the best one set up
 
     private Prefs() {
     }

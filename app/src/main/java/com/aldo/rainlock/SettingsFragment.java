@@ -40,9 +40,10 @@ import java.util.Objects;
 import java.util.Set;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
-    private static final String CAT_SETUP = "cat_setup";
-    private static final String STATUS_SERVICE = "status_service";
-    private static final String STATUS_GUARD = "status_guard";
+    private static final String CAT_MODE = "cat_mode";
+    private static final String MODE_BASIC = "mode_basic";
+    private static final String MODE_BETTER = "mode_better";
+    private static final String MODE_BEST = "mode_best";
     private static final String LOCK_NOW = "lock_now";
     private static final String ADD_TILE = "add_tile";
     private static final String KNOB_RESET = "knob_reset";
@@ -61,14 +62,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
-        find(STATUS_SERVICE).setOnPreferenceClickListener(p -> {
-            showServiceSteps();
-            return true;
-        });
-        find(STATUS_GUARD).setOnPreferenceClickListener(p -> {
-            showGrantOptions();
-            return true;
-        });
+        onModeTap(MODE_BASIC, Mode.BASIC, () -> showSteps(R.string.mode_basic, R.string.basic_message,
+                R.string.open_overlay_settings,
+                Settings.ACTION_MANAGE_OVERLAY_PERMISSION));  // opens the list: Android 11+ ignores a package here
+        onModeTap(MODE_BETTER, Mode.BETTER, () -> showSteps(R.string.mode_better, R.string.service_message,
+                R.string.open_accessibility, Settings.ACTION_ACCESSIBILITY_SETTINGS));
+        onModeTap(MODE_BEST, Mode.BEST, this::showGrantOptions);
         find(LOCK_NOW).setOnPreferenceClickListener(p -> {
             lockNow();
             return true;
@@ -117,30 +116,53 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         if (service == null) new SearchGestureGuard(context).restore();
 
         boolean granted = SearchGestureGuard.hasPermission(context);
-        if (granted && service != null) service.switchOffIfIdle();  // on by hand until the grant, e.g. an upgrade
-        // Setup only shows what's left to do; with the service on by hand, the permission is an upgrade
-        Preference setup = find(CAT_SETUP);
-        setup.setVisible(!granted);
-        setup.setTitle(service == null ? R.string.cat_setup : R.string.cat_upgrade);
-        find(STATUS_SERVICE).setVisible(service == null);
-        find(LOCK_NOW).setEnabled(RainLockService.canLock(context));
+        if (granted && service != null) service.switchOffIfIdle();  // on by hand until an upgrade
+        Mode mode = Mode.current(context);
+        find(CAT_MODE).setTitle(mode == Mode.NONE ? R.string.cat_mode_pick : R.string.cat_mode);
+        showModeRow(MODE_BASIC, Mode.BASIC, R.string.mode_basic, R.string.mode_basic_summary, mode);
+        showModeRow(MODE_BETTER, Mode.BETTER, R.string.mode_better, R.string.mode_better_summary, mode);
+        showModeRow(MODE_BEST, Mode.BEST, R.string.mode_best, R.string.mode_best_summary, mode);
+        // With the adb permission the app switches the service off between locks, so it can't stay on by hand
+        find(MODE_BETTER).setVisible(!granted);
+        find(LOCK_NOW).setEnabled(mode != Mode.NONE);
+
+        // The guard writes whenever it can, in any mode
         TwoStatePreference guard = find(Prefs.GUARD_SEARCH);
         guard.setSummaryOn(granted ? R.string.guard_summary_on : R.string.guard_summary_no_permission);
         guard.setSummaryOff(granted ? R.string.guard_summary_off : R.string.guard_summary_no_permission);
     }
 
+    /** A tap on a mode that's set up switches to it; otherwise it shows the steps, and the mode is used once ready. */
+    private void onModeTap(String key, Mode row, Runnable showSteps) {
+        find(key).setOnPreferenceClickListener(p -> {
+            Context context = requireContext();
+            boolean switching = row.isSetUp(context) && Mode.current(context) != row;
+            Mode.pick(context, row);
+            if (switching) refreshStatus();
+            else showSteps.run();
+            return true;
+        });
+    }
+
+    private void showModeRow(String key, Mode row, int title, int summary, Mode current) {
+        Preference preference = find(key);
+        preference.setTitle(row == current ? getString(R.string.mode_in_use, getString(title)) : getString(title));
+        boolean offer = row != current && row.isSetUp(requireContext());
+        preference.setSummary(offer ? getString(R.string.mode_tap_to_use, getString(summary)) : getString(summary));
+    }
+
     private void lockNow() {
-        RainLockService.requestLock(requireContext());
+        LockController.lock(requireContext());
         requireActivity().moveTaskToBack(true);  // back to the app underneath, e.g. Maps
     }
 
-    private void showServiceSteps() {
+    /** Basic and Better Mode's steps: a settings screen to open, plus App info for a restricted setting. */
+    private void showSteps(int title, int message, int openLabel, String openAction) {
         Context context = requireContext();
         new MaterialAlertDialogBuilder(context)
-                .setTitle(R.string.service_title)
-                .setMessage(R.string.service_message)
-                .setPositiveButton(R.string.open_accessibility, (dialog, which) ->
-                        startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)))
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(openLabel, (dialog, which) -> startActivity(new Intent(openAction)))
                 .setNeutralButton(R.string.app_info, (dialog, which) ->  // where Allow restricted settings lives
                         startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                                 Uri.fromParts("package", context.getPackageName(), null))))
@@ -152,7 +174,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         String command = "adb shell pm grant " + context.getPackageName() + " "
                 + Manifest.permission.WRITE_SECURE_SETTINGS;
         new MaterialAlertDialogBuilder(context)
-                .setTitle(R.string.grant_title)
+                .setTitle(R.string.mode_best)
                 .setMessage(getString(R.string.grant_message, command))
                 .setPositiveButton(R.string.grant_shizuku, (dialog, which) -> grantWithShizuku())
                 .setNeutralButton(R.string.copy_command, (dialog, which) -> context.getSystemService(ClipboardManager.class)
