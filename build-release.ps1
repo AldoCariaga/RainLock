@@ -1,7 +1,6 @@
 $ErrorActionPreference = 'Stop'
 
 # Needs JAVA_HOME (JDK 17) and ANDROID_HOME set
-
 if (-not (Test-Path keystore.properties)) {
     throw 'keystore.properties is missing. See "Release builds" in README.md.'
 }

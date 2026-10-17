@@ -1,11 +1,10 @@
 $ErrorActionPreference = 'Stop'
 
 # Needs JAVA_HOME (JDK 17) and ANDROID_HOME set, and a phone on USB with USB debugging on
-
 $pkg = 'com.aldo.rainlock'
 $adb = if ($env:ANDROID_HOME) { Join-Path $env:ANDROID_HOME 'platform-tools\adb.exe' } else { 'adb' }
 
-# Release-signed once the release key is set up, so updates install over the release build
+# Release-signed once keystore.properties exists, so updates install over the release build
 $variant = if (Test-Path keystore.properties) { 'release' } else { 'debug' }
 .\gradlew.bat "assemble$variant" --console=plain
 if ($LASTEXITCODE) { exit $LASTEXITCODE }
