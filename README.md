@@ -79,6 +79,9 @@ is why it's Best Mode only. RainLock writes both on Samsung and only
 `search_all_entrypoints_enabled` elsewhere (untested), and puts the old values back on unlock. If
 the phone dies mid-lock, the next start of the service restores them.
 
+Below Android 14 there's no Circle to Search (it shipped with 14), so RainLock writes nothing there
+and leaves it out of the app: no switch, and no mention in the mode descriptions.
+
 To map another phone, run the same snapshot diff while flipping its toggle.
 
 ## Test results

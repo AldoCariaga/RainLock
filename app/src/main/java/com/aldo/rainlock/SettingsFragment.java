@@ -31,6 +31,7 @@ import androidx.preference.TwoStatePreference;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.aldo.rainlock.grant.ShizukuGrant;
+import com.aldo.rainlock.guard.DeviceProfile;
 import com.aldo.rainlock.guard.SearchGestureGuard;
 
 import java.util.ArrayList;
@@ -62,11 +63,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
-        onModeTap(MODE_BASIC, Mode.BASIC, () -> showSteps(R.string.mode_basic, R.string.basic_message,
-                R.string.open_overlay_settings,
+        onModeTap(MODE_BASIC, Mode.BASIC, () -> showSteps(R.string.mode_basic,
+                search(R.string.basic_message, R.string.basic_message_no_search), R.string.open_overlay_settings,
                 Settings.ACTION_MANAGE_OVERLAY_PERMISSION));  // opens the list: Android 11+ ignores a package here
-        onModeTap(MODE_BETTER, Mode.BETTER, () -> showSteps(R.string.mode_better, R.string.service_message,
-                R.string.open_accessibility, Settings.ACTION_ACCESSIBILITY_SETTINGS));
+        onModeTap(MODE_BETTER, Mode.BETTER, () -> showSteps(R.string.mode_better,
+                search(R.string.service_message, R.string.service_message_no_search), R.string.open_accessibility,
+                Settings.ACTION_ACCESSIBILITY_SETTINGS));
         onModeTap(MODE_BEST, Mode.BEST, this::showGrantOptions);
         find(LOCK_NOW).setOnPreferenceClickListener(p -> {
             lockNow();
@@ -79,6 +81,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             setTileEnabled((Boolean) value);
             return true;
         });
+        find(Prefs.GUARD_SEARCH).setVisible(DeviceProfile.hasCircleToSearch());
+
         Preference addTile = find(ADD_TILE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             addTile.setOnPreferenceClickListener(p -> {
@@ -119,9 +123,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         if (granted && service != null) service.switchOffIfIdle();  // on by hand until an upgrade
         Mode mode = Mode.current(context);
         find(CAT_MODE).setTitle(mode == Mode.NONE ? R.string.cat_mode_pick : R.string.cat_mode);
-        showModeRow(MODE_BASIC, Mode.BASIC, R.string.mode_basic, R.string.mode_basic_summary, mode);
-        showModeRow(MODE_BETTER, Mode.BETTER, R.string.mode_better, R.string.mode_better_summary, mode);
-        showModeRow(MODE_BEST, Mode.BEST, R.string.mode_best, R.string.mode_best_summary, mode);
+        showModeRow(MODE_BASIC, Mode.BASIC, R.string.mode_basic,
+                search(R.string.mode_basic_summary, R.string.mode_basic_summary_no_search), mode);
+        showModeRow(MODE_BETTER, Mode.BETTER, R.string.mode_better,
+                search(R.string.mode_better_summary, R.string.mode_better_summary_no_search), mode);
+        showModeRow(MODE_BEST, Mode.BEST, R.string.mode_best,
+                search(R.string.mode_best_summary, R.string.mode_best_summary_no_search), mode);
         // With the adb permission the app switches the service off between locks, so it can't stay on by hand
         find(MODE_BETTER).setVisible(!granted);
         find(LOCK_NOW).setEnabled(mode != Mode.NONE);
@@ -175,7 +182,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 + Manifest.permission.WRITE_SECURE_SETTINGS;
         new MaterialAlertDialogBuilder(context)
                 .setTitle(R.string.mode_best)
-                .setMessage(getString(R.string.grant_message, command))
+                .setMessage(getString(search(R.string.grant_message, R.string.grant_message_no_search), command))
                 .setPositiveButton(R.string.grant_shizuku, (dialog, which) -> grantWithShizuku())
                 .setNeutralButton(R.string.copy_command, (dialog, which) -> context.getSystemService(ClipboardManager.class)
                         .setPrimaryClip(ClipData.newPlainText("adb", command)))
@@ -273,6 +280,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         ListPreference list = find(Prefs.BLUETOOTH_DEVICE);
         list.setEntries(names);
         list.setEntryValues(addresses);
+    }
+
+    /** Picks the text that mentions Circle to Search only on phones that have it. */
+    private static int search(int withSearch, int withoutSearch) {
+        return DeviceProfile.hasCircleToSearch() ? withSearch : withoutSearch;
     }
 
     private void toast(int message) {

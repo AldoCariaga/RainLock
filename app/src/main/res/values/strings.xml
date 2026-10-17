@@ -20,13 +20,18 @@
     <string name="mode_tap_to_use">Set up, tap to use it. %1$s</string>
     <string name="mode_basic">Basic Mode</string>
     <string name="mode_basic_summary">Needs Display over other apps, no accessibility service. But a swipe brings the status or navigation bar back for a few seconds, and rain on it then gets through, Circle to Search included</string>
+    <string name="mode_basic_summary_no_search">Needs Display over other apps, no accessibility service. But a swipe brings the status or navigation bar back for a few seconds, and rain on it then gets through</string>
     <string name="mode_better">Better Mode</string>
     <string name="mode_better_summary">Accessibility service, turned on by hand. The lock covers the bars, but the service stays on all the time, which some banking apps object to, and Circle to Search can open for a few seconds after a swipe up</string>
+    <string name="mode_better_summary_no_search">Accessibility service, turned on by hand. The lock covers the bars, but the service stays on all the time, which some banking apps object to</string>
     <string name="mode_best">Best Mode</string>
     <string name="mode_best_summary">Needs a computer, or Shizuku with Wireless debugging. The service is on only while locked, and Circle to Search stays blocked</string>
+    <string name="mode_best_summary_no_search">Needs a computer, or Shizuku with Wireless debugging. The service is on only while locked</string>
     <string name="basic_message">Find RainLock in the list and allow it.\n\nIf Android says \"Restricted setting\", tap App info, then ⋮ → Allow restricted settings, and try again.\n\nThe catch: this lock sits under the status and navigation bars, so it hides them. A swipe brings them back for a few seconds, and rain on them then gets through: it can pull the notification panel down or open Circle to Search. Better Mode covers the bars, and Best Mode also keeps Circle to Search off.</string>
+    <string name="basic_message_no_search">Find RainLock in the list and allow it.\n\nIf Android says \"Restricted setting\", tap App info, then ⋮ → Allow restricted settings, and try again.\n\nThe catch: this lock sits under the status and navigation bars, so it hides them. A swipe brings them back for a few seconds, and rain on them then gets through: it can pull the notification panel down. Better Mode covers the bars.</string>
     <string name="open_overlay_settings">Open settings</string>
     <string name="service_message">In Accessibility, tap Installed apps → RainLock and turn it on.\n\nIf Android says \"Restricted setting\", tap App info, then ⋮ → Allow restricted settings, and try again.\n\nThe catches: it stays on all the time, and some banking apps warn about that or won\'t open. And Circle to Search is only blocked while the navigation bar is hidden. A swipe up brings the bar back for a few seconds, and holding it then opens Circle to Search.\n\nBest Mode fixes both.</string>
+    <string name="service_message_no_search">In Accessibility, tap Installed apps → RainLock and turn it on.\n\nIf Android says \"Restricted setting\", tap App info, then ⋮ → Allow restricted settings, and try again.\n\nThe catch: it stays on all the time, and some banking apps warn about that or won\'t open.\n\nBest Mode fixes that.</string>
     <string name="open_accessibility">Open Accessibility</string>
     <string name="app_info">App info</string>
     <string name="lock_now">Lock now</string>
@@ -64,6 +69,7 @@
     <string name="knob_position_reset">Lock icon is back on the left</string>
 
     <string name="grant_message">Lets RainLock switch its accessibility service on only while locked, and keep Circle to Search blocked when a swipe up brings the navigation bar back. It stays granted through updates and reboots.\n\nNo computer: install Shizuku and start it with Wireless debugging (Shizuku shows how), then tap Use Shizuku.\n\nWith a computer: turn on USB debugging and run:\n\n%1$s</string>
+    <string name="grant_message_no_search">Lets RainLock switch its accessibility service on only while locked. It stays granted through updates and reboots.\n\nNo computer: install Shizuku and start it with Wireless debugging (Shizuku shows how), then tap Use Shizuku.\n\nWith a computer: turn on USB debugging and run:\n\n%1$s</string>
     <string name="copy_command">Copy command</string>
     <string name="grant_shizuku">Use Shizuku</string>
     <string name="shizuku_install">Install Shizuku, start it, then tap Use Shizuku again</string>

@@ -19,6 +19,12 @@ public final class DeviceProfile {
     }
 
     public static DeviceProfile current() {
+        if (!hasCircleToSearch()) return new DeviceProfile(List.of());
         return new DeviceProfile("samsung".equalsIgnoreCase(Build.MANUFACTURER) ? SAMSUNG_KEYS : OTHER_KEYS);
+    }
+
+    /** Circle to Search shipped with Android 14, so older phones (e.g. a Redmi Note 11 on 13) don't have it. */
+    public static boolean hasCircleToSearch() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE;
     }
 }
