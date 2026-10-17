@@ -14,6 +14,15 @@
     <string name="lock_failed">RainLock couldn\'t switch its accessibility service on. Open RainLock and check its mode</string>
     <string name="lock_not_set_up">RainLock isn\'t set up yet. Open it and pick a mode</string>
 
+    <string name="setup_warning_none">RainLock can\'t lock yet</string>
+    <string name="setup_warning_pick">Pick a mode below and set it up</string>
+    <string name="setup_warning_picked">%1$s isn\'t set up yet</string>
+    <string name="setup_warning_needs">%1$s needs %2$s. Tap to set it up</string>
+    <string name="setup_warning_fallback">%1$s needs %2$s, so RainLock is using %3$s for now. Tap to set it up</string>
+    <string name="needs_basic">Display over other apps allowed</string>
+    <string name="needs_better">its accessibility service turned on</string>
+    <string name="needs_best">its one-time permission, from a computer or Shizuku</string>
+
     <string name="cat_mode_pick">Setup: pick a mode</string>
     <string name="cat_mode">Mode</string>
     <string name="mode_in_use">%1$s (in use)</string>

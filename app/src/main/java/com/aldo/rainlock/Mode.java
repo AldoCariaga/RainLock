@@ -42,8 +42,9 @@ public enum Mode {
         }
     }
 
+    /** The mode picked in the app, set up or not; null if none was. */
     @Nullable
-    private static Mode picked(Context context) {
+    public static Mode picked(Context context) {
         String name = Prefs.get(context).getString(Prefs.MODE, null);
         if (name == null) return null;
         try {

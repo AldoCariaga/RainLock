@@ -41,6 +41,7 @@ import java.util.Objects;
 import java.util.Set;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
+    private static final String SETUP_WARNING = "setup_warning";
     private static final String CAT_MODE = "cat_mode";
     private static final String MODE_BASIC = "mode_basic";
     private static final String MODE_BETTER = "mode_better";
@@ -63,13 +64,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
-        onModeTap(MODE_BASIC, Mode.BASIC, () -> showSteps(R.string.mode_basic,
-                search(R.string.basic_message, R.string.basic_message_no_search), R.string.open_overlay_settings,
-                Settings.ACTION_MANAGE_OVERLAY_PERMISSION));  // opens the list: Android 11+ ignores a package here
-        onModeTap(MODE_BETTER, Mode.BETTER, () -> showSteps(R.string.mode_better,
-                search(R.string.service_message, R.string.service_message_no_search), R.string.open_accessibility,
-                Settings.ACTION_ACCESSIBILITY_SETTINGS));
-        onModeTap(MODE_BEST, Mode.BEST, this::showGrantOptions);
+        onModeTap(MODE_BASIC, Mode.BASIC);
+        onModeTap(MODE_BETTER, Mode.BETTER);
+        onModeTap(MODE_BEST, Mode.BEST);
+        find(SETUP_WARNING).setOnPreferenceClickListener(p -> {
+            Mode picked = Mode.picked(requireContext());
+            if (picked != null) showSetupSteps(picked);
+            return true;
+        });
         find(LOCK_NOW).setOnPreferenceClickListener(p -> {
             lockNow();
             return true;
@@ -132,6 +134,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         // With the adb permission the app switches the service off between locks, so it can't stay on by hand
         find(MODE_BETTER).setVisible(!granted);
         find(LOCK_NOW).setEnabled(mode != Mode.NONE);
+        showSetupWarning(granted, mode);
 
         // The guard writes whenever it can, in any mode
         TwoStatePreference guard = find(Prefs.GUARD_SEARCH);
@@ -139,16 +142,69 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         guard.setSummaryOff(granted ? R.string.guard_summary_off : R.string.guard_summary_no_permission);
     }
 
+    /** Warns when nothing is set up, or the picked mode isn't, naming what that mode still needs. */
+    private void showSetupWarning(boolean granted, Mode current) {
+        Context context = requireContext();
+        Mode picked = Mode.picked(context);
+        if (picked == Mode.BETTER && granted) picked = null;  // Better's row is hidden then, so it can't be finished
+        Preference warning = find(SETUP_WARNING);
+        warning.setSelectable(picked != null);
+        if (picked == null) {
+            warning.setVisible(current == Mode.NONE);
+            warning.setTitle(R.string.setup_warning_none);
+            warning.setSummary(R.string.setup_warning_pick);
+            return;
+        }
+        warning.setVisible(!picked.isSetUp(context));
+        String name = getString(modeTitle(picked));
+        String needs = getString(modeNeeds(picked));
+        if (current == Mode.NONE) {
+            warning.setTitle(R.string.setup_warning_none);
+            warning.setSummary(getString(R.string.setup_warning_needs, name, needs));
+        } else {
+            warning.setTitle(getString(R.string.setup_warning_picked, name));
+            warning.setSummary(getString(R.string.setup_warning_fallback, name, needs, getString(modeTitle(current))));
+        }
+    }
+
     /** A tap on a mode that's set up switches to it; otherwise it shows the steps, and the mode is used once ready. */
-    private void onModeTap(String key, Mode row, Runnable showSteps) {
+    private void onModeTap(String key, Mode row) {
         find(key).setOnPreferenceClickListener(p -> {
             Context context = requireContext();
             boolean switching = row.isSetUp(context) && Mode.current(context) != row;
             Mode.pick(context, row);
-            if (switching) refreshStatus();
-            else showSteps.run();
+            refreshStatus();  // the warning names the new pick
+            if (!switching) showSetupSteps(row);
             return true;
         });
+    }
+
+    private void showSetupSteps(Mode mode) {
+        switch (mode) {
+            case BASIC:
+                showSteps(R.string.mode_basic,
+                        search(R.string.basic_message, R.string.basic_message_no_search), R.string.open_overlay_settings,
+                        Settings.ACTION_MANAGE_OVERLAY_PERMISSION);  // opens the list: Android 11+ ignores a package here
+                break;
+            case BETTER:
+                showSteps(R.string.mode_better,
+                        search(R.string.service_message, R.string.service_message_no_search), R.string.open_accessibility,
+                        Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                break;
+            case BEST:
+                showGrantOptions();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private static int modeTitle(Mode mode) {
+        return mode == Mode.BASIC ? R.string.mode_basic : mode == Mode.BETTER ? R.string.mode_better : R.string.mode_best;
+    }
+
+    private static int modeNeeds(Mode mode) {
+        return mode == Mode.BASIC ? R.string.needs_basic : mode == Mode.BETTER ? R.string.needs_better : R.string.needs_best;
     }
 
     private void showModeRow(String key, Mode row, int title, int summary, Mode current) {
